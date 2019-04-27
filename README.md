@@ -19,10 +19,13 @@
 
 Создайте чат со своим ботом.
 
+[Узнайте](https://dvmn.org/api/docs/) свой токен для DevmanAPI и запишите в `.env`. 
+
 Запишите в `.env` любой рабочи proxy
 
 ```txt
-TOKEN='ваш токен'
+TELEGRAM_TOKEN='ваш токен'
+DEVMAN_TOKEN='ваш токен'
 USER_ID='12345'
 PROXY='http://123.123.12.12:1080/'
 ```

@@ -1,32 +1,44 @@
 import requests
 import datetime
-from telegram_bot import send_notifications
+from os.path import join
+from os import getcwd
+from os import getenv
+from dotenv import load_dotenv
+from telegram_bot import make_notifications
 
 
-def fetch_reviews():
+def send_request_on_devman(timestamp_for_tracking):
+    dvmn_token = getenv('DEVMAN_TOKEN')
     url = 'https://dvmn.org/api/long_polling/'
-    ninety_seconds = 90
-    first_timestamp = datetime.datetime.now().timestamp()
-    headers = {'Authorization': 'Token 4b6cbc3d2203e468b0529ecaac824e14378abb9f'}
-    params = {'timestamp': first_timestamp}
+    headers = {'Authorization': f'Token {dvmn_token}'}
+    params = {'timestamp': timestamp_for_tracking}
+    try:
+        response = requests.get(url, headers=headers, params=params).json()
+        return response
+    except requests.exceptions.Timeout:
+        return None
+
+
+def fetch_solution_attempts():
+    timestamp_for_tracking = datetime.datetime.now().timestamp()
     while True:
-        try:
-            response = requests.get(url, headers=headers, params=params).json()
-        except requests.exceptions.Timeout:
+        response_from_devman_api = send_request_on_devman(timestamp_for_tracking)
+        if response_from_devman_api is None:
             continue
-        if response['status'] == 'found':
-            notifications = response['new_attempts']
-            last_notification = notifications[-1]
+        if response_from_devman_api['status'] == 'found':
+            solution_attempts = response_from_devman_api['new_attempts']
+            last_solution_attempt = solution_attempts[-1]
             time_shift = 0.000001
-            params['timestamp'] = last_notification['timestamp'] + time_shift
-            send_notifications(notifications)
+            timestamp_for_tracking = last_solution_attempt['timestamp'] + time_shift
+            make_notifications(solution_attempts)
         else:
-            params['timestamp'] += ninety_seconds
+            timestamp_for_tracking = response_from_devman_api['timestamp_to_request']
 
 
 def main():
-    fetch_reviews()
+    fetch_solution_attempts()
 
 
 if __name__ == '__main__':
+    load_dotenv(join(getcwd(), '.env'))
     main()
