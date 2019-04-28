@@ -19,26 +19,25 @@ def send_request_on_devman(timestamp_for_tracking):
         return None
 
 
-def fetch_solution_attempts():
+def main():
+    load_dotenv(join(getcwd(), '.env'))
     timestamp_for_tracking = datetime.datetime.now().timestamp()
     while True:
-        response_from_devman_api = send_request_on_devman(timestamp_for_tracking)
+        response_from_devman_api = send_request_on_devman(
+            timestamp_for_tracking)
         if response_from_devman_api is None:
             continue
         if response_from_devman_api['status'] == 'found':
             solution_attempts = response_from_devman_api['new_attempts']
-            last_solution_attempt = solution_attempts[-1]
-            time_shift = 0.000001
-            timestamp_for_tracking = last_solution_attempt['timestamp'] + time_shift
+            timestamp_for_tracking = response_from_devman_api[
+                'last_attempt_timestamp'
+            ]
             make_notifications(solution_attempts)
         else:
-            timestamp_for_tracking = response_from_devman_api['timestamp_to_request']
-
-
-def main():
-    fetch_solution_attempts()
+            timestamp_for_tracking = response_from_devman_api[
+                'timestamp_to_request'
+            ]
 
 
 if __name__ == '__main__':
-    load_dotenv(join(getcwd(), '.env'))
     main()
