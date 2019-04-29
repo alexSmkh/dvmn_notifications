@@ -15,7 +15,7 @@ def send_request_on_devman(timestamp_for_tracking):
     try:
         response = requests.get(url, headers=headers, params=params).json()
         return response
-    except requests.exceptions.Timeout:
+    except requests.exceptions.ConnectionError:
         return None
 
 
