@@ -13,10 +13,12 @@ def send_request_on_devman(timestamp_for_tracking):
     headers = {'Authorization': f'Token {dvmn_token}'}
     params = {'timestamp': timestamp_for_tracking}
     try:
-        response = requests.get(url, headers=headers, params=params).json()
-        return response
+        response = requests.get(url, headers=headers, params=params)
     except requests.exceptions.ConnectionError:
         return None
+
+    if response.ok:
+        return response.json()
 
 
 def main():
