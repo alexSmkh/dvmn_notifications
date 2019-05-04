@@ -1,5 +1,6 @@
 import requests
 import datetime
+from time import sleep
 from os.path import join
 from os import getcwd
 from os import getenv
@@ -17,8 +18,9 @@ def send_request_on_devman(timestamp_for_tracking):
     except requests.exceptions.ConnectionError:
         return None
 
-    if response.ok:
-        return response.json()
+    if not response.ok:
+        response.raise_for_status()
+    return response.json()
 
 
 def main():
@@ -27,8 +29,11 @@ def main():
     while True:
         response_from_devman_api = send_request_on_devman(
             timestamp_for_tracking)
+
         if response_from_devman_api is None:
+            sleep(30)
             continue
+
         if response_from_devman_api['status'] == 'found':
             solution_attempts = response_from_devman_api['new_attempts']
             timestamp_for_tracking = response_from_devman_api[
