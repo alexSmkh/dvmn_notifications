@@ -1,15 +1,16 @@
-import requests
 import datetime
 from time import sleep
 from os.path import join
 from os import getcwd
-from os import getenv
+from os import environ
+
+import requests
 from dotenv import load_dotenv
 from telegram_bot import make_notifications
 
 
 def send_request_on_devman(timestamp_for_tracking):
-    dvmn_token = getenv('DEVMAN_TOKEN')
+    dvmn_token = environ('DEVMAN_TOKEN')
     url = 'https://dvmn.org/api/long_polling/'
     headers = {'Authorization': f'Token {dvmn_token}'}
     params = {'timestamp': timestamp_for_tracking}
