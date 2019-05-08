@@ -15,7 +15,7 @@ def send_notification_on_telegram(updater, user_id, notification):
 def make_notifications(solution_attempts):
     token = environ['TELEGRAM_TOKEN']
     user_id = environ['USER_ID']
-    updater = Updater(token=token, use_context=True)
+    updater = Updater(token=token)
 
     for solution_attempt in solution_attempts:
         lesson_title = solution_attempt['lesson_title']
