@@ -1,4 +1,5 @@
 import datetime
+import logging
 from time import sleep
 from os.path import join
 from os import getcwd
@@ -25,6 +26,12 @@ def send_request_on_devman(timestamp_for_tracking):
 
 
 def main():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s | %(process)d | %(levelname)s | %(message)s'
+    )
+    logging.info('Бот запущен.')
+    
     load_dotenv(join(getcwd(), '.env'))
     timestamp_for_tracking = datetime.datetime.now().timestamp()
     while True:
