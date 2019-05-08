@@ -14,10 +14,9 @@ def send_notification_on_telegram(updater, user_id, notification):
 
 def make_notifications(solution_attempts):
     token = getenv('TELEGRAM_TOKEN')
-    proxy_url = getenv('PROXY')
     user_id = getenv('USER_ID')
-    request_kwargs = {'proxy_url': proxy_url}
-    updater = Updater(token, request_kwargs=request_kwargs)
+    updater = Updater(token=token, use_context=True)
+
 
     for solution_attempt in solution_attempts:
         lesson_title = solution_attempt['lesson_title']
