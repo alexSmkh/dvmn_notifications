@@ -10,7 +10,7 @@ from telegram_bot import make_notifications
 
 
 def send_request_on_devman(timestamp_for_tracking):
-    dvmn_token = environ('DEVMAN_TOKEN')
+    dvmn_token = environ.get('DEVMAN_TOKEN')
     url = 'https://dvmn.org/api/long_polling/'
     headers = {'Authorization': f'Token {dvmn_token}'}
     params = {'timestamp': timestamp_for_tracking}
