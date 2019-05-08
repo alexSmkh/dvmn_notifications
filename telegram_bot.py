@@ -13,8 +13,8 @@ def send_notification_on_telegram(updater, user_id, notification):
 
 
 def make_notifications(solution_attempts):
-    token = environ.get('TELEGRAM_TOKEN')
-    user_id = environ.get('USER_ID')
+    token = environ['TELEGRAM_TOKEN']
+    user_id = environ['USER_ID']
     updater = Updater(token=token, use_context=True)
 
     for solution_attempt in solution_attempts:
