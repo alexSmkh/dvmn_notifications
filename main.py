@@ -13,18 +13,6 @@ from dotenv import load_dotenv
 logger = get_logger('TelegramLogger')
 
 
-class LogsHandler(logging.Handler):
-    def __init__(self):
-        super().__init__()
-        telegram_token = environ['TELEGRAM_TOKEN']
-        self.updater = Updater(token=telegram_token)
-
-    def emit(self, record):
-        log_entry = self.format(record)
-        user_id = environ['USER_ID']
-        send_notification_on_telegram(self.updater, user_id, str(log_entry))
-
-
 def send_notification_on_telegram(updater, user_id, message):
     try:
         updater.bot.send_message(
