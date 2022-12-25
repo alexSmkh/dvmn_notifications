@@ -41,6 +41,17 @@ USER_ID='12345'
 python3 main.py
 ```
 
+
+### Как запустить в Docker
+Сбилдить проект
+```shell
+docker build -t dvmn_notification .
+```
+Запустить
+```shell
+docker run --env-file=.env --rm dvmn_notification
+```
+
 ### Цель проекта
  Код написать в образовательных целях на онлайн-курсе для веб-разработчиков 
  [dvmn.org](dvmn.org)
